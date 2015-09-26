@@ -34,7 +34,7 @@ class VideoPlayer{
   var parent:Sprite;
   var totalTime:Float;
   var leftTime:Float = 0;
-  var timeRate:Float = 50;
+  var timeRate:Float;
   var timer:Timer;  
   var stopped = true;
   var tilesheet:Tilesheet;
@@ -44,6 +44,8 @@ class VideoPlayer{
   var bitmap: BitmapData;
   var cols:Int;
   public var pause:Bool;
+  
+  private var smoothTime:Float = 100;
   
   var updateView:(Int->Void);
   
@@ -59,6 +61,7 @@ class VideoPlayer{
     this.tilesheet = new Tilesheet(bitmap);
     this.bitmap = bitmap;
     this.cols = cols;
+    this.timeRate = totalTime/count;
     
     var k : Int = 0;
     var rowHeight = bitmap.height/rows;

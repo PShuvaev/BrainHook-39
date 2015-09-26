@@ -117,6 +117,7 @@ class Splash1 extends Sprite {
         
         Timer.delay(startGame1, 300);
       });
+      addOnMouseAnumation(newGameBtn);
       
       exitBtn.text = "Exit game";
       exitBtn.defaultTextFormat = scoreFormat;
@@ -126,8 +127,29 @@ class Splash1 extends Sprite {
       addChild(exitBtn);
       exitBtn.addEventListener(MouseEvent.MOUSE_DOWN, function(event:MouseEvent){
         flash.system.System.exit(0);
-      });    
+      });
+      addOnMouseAnumation(exitBtn);
     });
+  }
+  
+  private function addOnMouseAnumation(field:TextField){
+    var w = field.width, h = field.height;
+    var sprite = new Sprite();
+    addChild(sprite);
+    
+    sprite.x = field.x;
+    sprite.y = field.y;
+    sprite.addChild(field);
+    field.x = field.y = 0;
+    
+    var w = sprite.width, h = sprite.height, _x = sprite.x, _y = sprite.y; 
+    
+    sprite.addEventListener(MouseEvent.MOUSE_OVER, function(event:MouseEvent){
+        Actuate.tween (sprite, 0.6, { width:w+4, height:h+4, x:_x-2, y:_y-2 }, false);
+      });
+    sprite.addEventListener(MouseEvent.MOUSE_OUT, function(event:MouseEvent){
+        Actuate.tween (sprite, 0.6, { width:w-4, height:h-4, x:_x+2, y:_y+2 }, false);
+      });
   }
   
   private function addBitmap(fn:String):Sprite{

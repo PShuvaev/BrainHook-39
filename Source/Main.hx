@@ -38,6 +38,7 @@ class Main extends Sprite {
   private var codeTxt = "hello, world!";
   private var codeTxtPos = 1;
   var state : State;
+  var currentPage: Sprite;
   
   var scoreFormat:TextFormat = new TextFormat("Verdana", 24, 0x4b4b4b, true);
   var scoreFormat2:TextFormat = new TextFormat("Verdana", 24, 0x00bb5b, true);
@@ -52,11 +53,11 @@ class Main extends Sprite {
   
   public function startSplash1(){
     removeChildren();
-    addChild(new Splash1(startGame1));
+    addChild(currentPage = new Splash1(startGame1));
   }
   
   public function startGame1(){
-    removeChildren();
+    if(currentPage != null) removeChild(currentPage);
     addChild(new Game1(showFailPage, showWinPage));
   }
   
@@ -106,17 +107,20 @@ class Splash1 extends Sprite {
       
       newGameBtn.text = "New game";
       newGameBtn.defaultTextFormat = scoreFormat;
-      newGameBtn.x = 150;
+      newGameBtn.x = 100;
       newGameBtn.y = 50;
       newGameBtn.width = 300;
       addChild(newGameBtn);
       newGameBtn.addEventListener(MouseEvent.MOUSE_DOWN, function(event:MouseEvent){
-        startGame1();
+        Actuate.tween (newGameBtn, 0.4, { x: -500 }, false).ease (Quad.easeInOut);
+        Actuate.tween (exitBtn, 0.4, { x: 2000 }, false).ease (Quad.easeInOut);
+        
+        Timer.delay(startGame1, 300);
       });
       
-      exitBtn.text = "Exit";
+      exitBtn.text = "Exit game";
       exitBtn.defaultTextFormat = scoreFormat;
-      exitBtn.x = 500;
+      exitBtn.x = 450;
       exitBtn.y = 50;
       exitBtn.width = 300;
       addChild(exitBtn);
@@ -158,7 +162,7 @@ class Game1 extends Sprite{
     
     addEventListener(Event.ADDED_TO_STAGE, function(e){
         
-      totalTimeProgressBar = new ProgressBar(this, 10, 50, stage.stageWidth-20, 50*1000);
+      totalTimeProgressBar = new ProgressBar(this, 10, 10, stage.stageWidth-20, 50*1000);
       totalTimeProgressBar.onEnd = function(){
         if(!finished){
           failGame();
@@ -178,15 +182,16 @@ class Game1 extends Sprite{
       
       
       var coffeeLevelFont = Assets.getFont ("assets/FreebooterUpdated.ttf");
-      var coffeeLevelFormat = new TextFormat(coffeeLevelFont.fontName, 36, 0xa86540, true);
+      var coffeeLevelFormat = new TextFormat(coffeeLevelFont.fontName, 40, 0xa86540, true);
     
       addChild(coffeeLevel);
       coffeeLevel.width = stage.stageWidth;
-      coffeeLevel.x = 10;
-      coffeeLevel.y = 10;
+      coffeeLevel.x = 200;
+      coffeeLevel.y = 0;
       coffeeLevel.defaultTextFormat = coffeeLevelFormat;
       coffeeLevel.selectable = false;
-      coffeeLevel.text = "Level of coffee in the blood:";
+      coffeeLevel.text = "Level of coffee in the blood";
+      
       
       var textMoveTimerRate = 50;
       var textMoveTimer = new Timer(textMoveTimerRate);
@@ -211,10 +216,21 @@ class Game1 extends Sprite{
       
       var coffeeBitmap = addBitmap("coffee.png");
       coffeeBitmap.x = 50;
-      coffeeBitmap.y = 450;
+      coffeeBitmap.y = 650;
+      
+      // выпрыгивает чашка с кофе
+      var coffeeHeight = coffeeBitmap.height;
+      var coffeeWidth = coffeeBitmap.width;
+      Actuate.tween (coffeeBitmap, 0.8, { y: 450-100, height: coffeeHeight*0.6, width: coffeeWidth*0.8 }, false).ease (Quad.easeInOut)
+        .onComplete(function(){
+          Actuate.tween (coffeeBitmap, 0.4, { y: 450, height: coffeeHeight, width: coffeeWidth }, false).ease (Quad.easeInOut);
+        });
+      
       coffeeBitmap.addEventListener( MouseEvent.CLICK, function(arg){
         var coffeeWidth = coffeeBitmap.width;
         var coffeeHeight = coffeeBitmap.height;
+        
+        // чашка увеличивается при нажатии
         Actuate.tween (coffeeBitmap, 0.2, { height: coffeeHeight*1.1, width: coffeeWidth*1.1 }, false).ease (Quad.easeInOut)
           .onComplete(function(){
             Actuate.tween (coffeeBitmap, 0.2, { height: coffeeHeight, width: coffeeWidth }, false).ease (Quad.easeInOut);

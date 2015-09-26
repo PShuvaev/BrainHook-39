@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  
+  <meta title="BrainHook39" package="com.sample.brainhook39" version="1.0.0" company="Company Name" />
+  <app main="Main" path="Export" file="BrainHook39" />
+  
+  <source path="Source" />
+  
+  <haxelib name="openfl" />
+  <haxelib name="actuate" />
+  <haxelib name="haxe-gif" />
+  
+  <assets path="Assets" rename="assets" />
+  
+</project>

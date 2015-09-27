@@ -57,12 +57,20 @@ class Main extends Sprite {
     var bitmap = addBitmap("lose.jpg");
     bitmap.width = stage.stageWidth;
     bitmap.height = stage.stageHeight;
+    
+    Timer.delay(function(){
+      startSplash1();
+    }, 3000);
   }
   
   private function showWinPage(){
     var bitmap = addBitmap("win.jpg");
     bitmap.width = stage.stageWidth;
     bitmap.height = stage.stageHeight;
+    
+    Timer.delay(function(){
+      startSplash1();
+    }, 3000);
   }
   
   private function addBitmap(fn:String):Sprite{

@@ -22,8 +22,8 @@ using Lambda;
 
 class Splash1 extends Sprite {
   var scoreFormat:TextFormat;
-  var newGameBtn = new TextField();
-  var exitBtn = new TextField();
+  var newGameBtn = new MyTextField();
+  var exitBtn = new MyTextField();
 
   public function new(startGame1:Void->Void){
     super();

@@ -23,9 +23,9 @@ using Lambda;
 class Game1 extends Sprite{
   var totalTimeProgressBar:ProgressBar;
   
-  private var codeTextField:TextField = new TextField();
-  private var coffeeLevel:TextField = new TextField();
-  private var codeTxt = "progress bar";
+  private var codeTextField:TextField = new MyTextField();
+  private var coffeeLevel:TextField = new MyTextField();
+  private var codeTxt = "private var codeTextField is TextField eq new TextField";
   private var codeTxtPos = 0;
   private var finished = false;  
   private var failGame:Void->Void;
@@ -58,7 +58,7 @@ class Game1 extends Sprite{
     
     addEventListener(Event.ADDED_TO_STAGE, function(e){
         
-      totalTimeProgressBar = new ProgressBar(this, 10, 10, stage.stageWidth-20, 20*1000);
+      totalTimeProgressBar = new ProgressBar(this, 10, 10, stage.stageWidth-20, 15*1000);
       totalTimeProgressBar.onEnd = function(){
         if(!finished){
           failGame();
@@ -90,8 +90,8 @@ class Game1 extends Sprite{
       var textMoveTimerRate = 50;
       textMoveTimer = new Timer(textMoveTimerRate);
       textMoveTimer.run = function(){
-        codeTextField.x = codeTextField.x-3;
-        codeTextField.width = codeTextField.width+3;
+        codeTextField.x = codeTextField.x-2;
+        codeTextField.width = codeTextField.width+2;
       };
       
       stage.addEventListener(KeyboardEvent.KEY_UP, keyDown);
@@ -140,7 +140,7 @@ class Game1 extends Sprite{
           
           mainVideoPlayer.stop();
           
-          var drinkPl = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 4*1000, 7, 7, 47, drinkData);
+          var drinkPl = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 5*1000, 7, 7, 47, drinkData);
           drinkPl.onEnd = function(){
             mainVideoPlayer.start();
             coffeeLock = false;
@@ -165,7 +165,7 @@ class Game1 extends Sprite{
   }
   
   private function animateSymbolDeletion(ch: String){
-    var tf = new TextField();
+    var tf = new MyTextField();
     tf.width = tf.height = 60;
     tf.defaultTextFormat = enteredTxtFormat;
     tf.text = ch;
@@ -185,6 +185,7 @@ class Game1 extends Sprite{
   
   private function keyDown(event:KeyboardEvent):Void {
     if(codeTxtPos < codeTxt.length){
+        trace(codeTxt.toUpperCase().charCodeAt(codeTxtPos), event.keyCode);
         if(codeTxt.toUpperCase().charCodeAt(codeTxtPos) == event.keyCode){
           codeTxtPos++;
           animateSymbolDeletion(codeTxt.charAt(codeTxtPos));

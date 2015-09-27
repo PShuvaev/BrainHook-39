@@ -25,15 +25,17 @@ class Game1 extends Sprite{
   
   private var codeTextField:TextField = new TextField();
   private var coffeeLevel:TextField = new TextField();
-  private var codeTxt = "hello, world!";
+  private var codeTxt = "totalTimeProgressBar = new ProgressBar(this, 10, 10)";
   private var codeTxtPos = 0;
   private var finished = false;  
   private var failGame:Void->Void;
   private var winGame:Void->Void;
   
+  var coffeeLevelFormat: TextFormat;
+  
 
-  var scoreFormat:TextFormat = new TextFormat("Verdana", 36, 0x4b4b4b, true);
-  var scoreFormat2:TextFormat = new TextFormat("Verdana", 36, 0x00bb5b, true);
+  var patternTxtFormat:TextFormat = new TextFormat("Verdana", 56, 0x00bb5b, true);
+  var enteredTxtFormat:TextFormat = new TextFormat("Verdana", 56, 0x00bb5b, true);
 
   public function new (failGame:Void->Void, winGame:Void->Void) {
     super();
@@ -53,16 +55,15 @@ class Game1 extends Sprite{
       
       addChild(codeTextField);
       codeTextField.width = stage.stageWidth;
-      codeTextField.height = 50;
+      codeTextField.height = 100;
       codeTextField.x = stage.stageWidth-20;
-      codeTextField.y = stage.stageWidth/2;
-      codeTextField.defaultTextFormat = scoreFormat;
+      codeTextField.y = stage.stageWidth/2-50;
+      codeTextField.defaultTextFormat = patternTxtFormat;
       codeTextField.selectable = false;
       codeTextField.text = codeTxt;
       
-      
       var coffeeLevelFont = Assets.getFont ("assets/FreebooterUpdated.ttf");
-      var coffeeLevelFormat = new TextFormat(coffeeLevelFont.fontName, 40, 0xa86540, true);
+      coffeeLevelFormat = new TextFormat(coffeeLevelFont.fontName, 40, 0xa86540, true);
     
       addChild(coffeeLevel);
       coffeeLevel.width = stage.stageWidth;
@@ -72,11 +73,16 @@ class Game1 extends Sprite{
       coffeeLevel.selectable = false;
       coffeeLevel.text = "Level of coffee in the blood";
       
+      var format1 = coffeeLevel.getTextFormat(0, 4);
+      format1.color = 0x0000ff;
+      coffeeLevel.setTextFormat(format1, 0, 4);
+      
       
       var textMoveTimerRate = 50;
       var textMoveTimer = new Timer(textMoveTimerRate);
       textMoveTimer.run = function(){
         codeTextField.x = codeTextField.x-1;
+        codeTextField.width = codeTextField.width + 1;
       };
       
       stage.addEventListener(KeyboardEvent.KEY_UP, keyDown);
@@ -85,7 +91,7 @@ class Game1 extends Sprite{
       var vpData = Assets.getBitmapData ("assets/work.jpg");
       var drinkData = Assets.getBitmapData ("assets/drink.jpg");
       
-      var vp = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 30*1000, 11, 11, 109, vpData);
+      var vp = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 15*1000, 13, 13, 166, vpData);
       vp.onEnd = function(){
         if(!finished){
           failGame();
@@ -139,22 +145,41 @@ class Game1 extends Sprite{
       return sprite;
   }
   
+  private function animateSymbolDeletion(ch: String){
+    var tf = new TextField();
+    tf.width = tf.height = 60;
+    tf.defaultTextFormat = enteredTxtFormat;
+    tf.text = ch;
+    var sprite = new Sprite();
+    sprite.x = codeTextField.x;
+    sprite.y = codeTextField.y;
+    sprite.addChild(tf);
+    sprite.width = sprite.height = 60;
+    addChild(sprite);
+
+    
+    Actuate.tween (sprite, 0.4, { y: sprite.y-250, x: sprite.x-250, width: 160, height: 160, alpha: 0 }, false).ease (Quad.easeInOut)
+        .onComplete(function(){
+          removeChild(sprite);
+        });
+  }
   
   private function keyDown(event:KeyboardEvent):Void {
-    /*switch( state ) {
-        case Intro: {};
-    }*/
-
-  
     if(codeTxtPos < codeTxt.length){
-        if(
-          codeTxt.toUpperCase().charCodeAt(codeTxtPos) == event.keyCode){
+        trace(codeTxt.toUpperCase().charCodeAt(codeTxtPos));
+        trace(event.keyCode);
+        if(codeTxt.toUpperCase().charCodeAt(codeTxtPos) == event.keyCode){
           codeTxtPos++;
+          
+          animateSymbolDeletion(codeTxt.charAt(codeTxtPos));
         }else{
-          codeTxtPos=0;
+          //codeTxtPos=0;
         }
-      codeTextField.setTextFormat(scoreFormat);
-      codeTextField.setTextFormat(scoreFormat2, 0, codeTxtPos);
+      trace(codeTxtPos);
+      codeTextField.text = codeTxt.substring(codeTxtPos, codeTxt.length);
+      //codeTextField.setTextFormat(patternTxtFormat);
+      //codeTextField.setTextFormat(enteredTxtFormat, 0, codeTxtPos);
+      
     } 
     
     if(codeTxtPos >= codeTxt.length){

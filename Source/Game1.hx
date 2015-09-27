@@ -25,7 +25,7 @@ class Game1 extends Sprite{
   
   private var codeTextField:TextField = new MyTextField();
   private var coffeeLevel:TextField = new MyTextField();
-  private var codeTxt = "private var codeTextField is TextField eq new TextField";
+  private var codeTxt:String;
   private var codeTxtPos = 0;
   private var finished = false;  
   private var failGame:Void->Void;
@@ -50,11 +50,27 @@ class Game1 extends Sprite{
         f();
       };
   }
+  
+  private function getRandomCode(){
+    var arr = ["if textMoveTimer not eq null then stop textMoveTimer"
+          , "var patternTxtFormat TextFormat set new TextFormat Verdana red true"
+          , "Actuate tween coffeeBitmap y height coffeeHeight width coffeeWidth"
+          , "codeTxt toUpperCase charCodeAt codeTxtPos eq event keyCode"
+          , "var bitmapData eq Assets getBitmapData assets filename"
+          , "public function new failGame Void to Void winGame Void to Void"
+          , "addChild new Game1 showFailPage showWinPage"
+          , "tilesheet drawTiles parent graphics x y parseFloat index scale true Tilesheet TILE_SCALE"
+          , "var scale set cols width div bitmap width"
+          , "private var codeTextField is TextField eq new TextField"];
+          
+    return arr[Std.random(arr.length)];      
+  }
 
   public function new (_failGame:Void->Void, _winGame:Void->Void) {
     super();
     this.failGame = endGameWith(_failGame);
     this.winGame = endGameWith(_winGame);
+    codeTxt = getRandomCode();
     
     addEventListener(Event.ADDED_TO_STAGE, function(e){
         

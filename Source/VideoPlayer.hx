@@ -86,11 +86,18 @@ class VideoPlayer{
     var _x = Std.parseFloat(""+x), _y = Std.parseFloat(""+y);
     var scale = cols * width/bitmap.width;
     if(timer != null) timer.stop();
+    
     timer = new Timer(Std.int(timeRate));
+    pause = false;
+    index = 0;
+    leftTime = 0;
+    
     timer.run = function(){
       if(pause) return;
       
       if(index>=count-1) {
+        timer.stop();
+          
         if(onEnd != null){
           onEnd();
         }
@@ -101,8 +108,6 @@ class VideoPlayer{
       
       
       if(leftTime >= totalTime){
-        trace(2);
-      
         timer.stop();
         if(onEnd != null){
           onEnd();

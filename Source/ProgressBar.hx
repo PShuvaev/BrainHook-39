@@ -29,7 +29,7 @@ class ProgressBar{
   var timeRate:Float = 150;
   var timer:Timer;      
   var updateProgressBar:(Float->Void);
-  var stopped = true;
+  public var stopped = true;
   
   public var onEnd:(Void->Void);
   
@@ -59,8 +59,11 @@ class ProgressBar{
   }
   
   public function start(){
+    stopped = false;
     timer = new Timer(Std.int(timeRate));
     timer.run = function(){
+      if(stopped) return;
+      
       if(leftTime >= totalTime){
         timer.stop();
         if(onEnd != null){

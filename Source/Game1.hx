@@ -33,7 +33,6 @@ class Game1 extends Sprite{
   
   var coffeeLevelFormat: TextFormat;
   
-
   var patternTxtFormat:TextFormat = new TextFormat("Verdana", 56, 0x00bb5b, true);
   var enteredTxtFormat:TextFormat = new TextFormat("Verdana", 56, 0x00bb5b, true);
 
@@ -44,7 +43,7 @@ class Game1 extends Sprite{
     
     addEventListener(Event.ADDED_TO_STAGE, function(e){
         
-      totalTimeProgressBar = new ProgressBar(this, 10, 10, stage.stageWidth-20, 50*1000);
+      totalTimeProgressBar = new ProgressBar(this, 10, 10, stage.stageWidth-20, 20*1000);
       totalTimeProgressBar.onEnd = function(){
         if(!finished){
           failGame();
@@ -81,8 +80,8 @@ class Game1 extends Sprite{
       var textMoveTimerRate = 50;
       var textMoveTimer = new Timer(textMoveTimerRate);
       textMoveTimer.run = function(){
-        codeTextField.x = codeTextField.x-1;
-        codeTextField.width = codeTextField.width + 1;
+        codeTextField.x = codeTextField.x-3;
+        codeTextField.width = codeTextField.width+3;
       };
       
       stage.addEventListener(KeyboardEvent.KEY_UP, keyDown);
@@ -107,12 +106,19 @@ class Game1 extends Sprite{
       // выпрыгивает чашка с кофе
       var coffeeHeight = coffeeBitmap.height;
       var coffeeWidth = coffeeBitmap.width;
-      Actuate.tween (coffeeBitmap, 0.8, { y: 450-100, height: coffeeHeight*0.6, width: coffeeWidth*0.8 }, false).ease (Quad.easeInOut)
+      Actuate.tween (coffeeBitmap, 0.8, { y: 450-100, height: coffeeHeight*0.8, width: coffeeWidth*0.9 }, false).ease (Quad.easeInOut)
         .onComplete(function(){
           Actuate.tween (coffeeBitmap, 0.4, { y: 450, height: coffeeHeight, width: coffeeWidth }, false).ease (Quad.easeInOut);
         });
       
+      var coffeeLock = false;
+      
       coffeeBitmap.addEventListener( MouseEvent.CLICK, function(arg){
+        if(coffeeLock) return;
+        coffeeLock = true;
+        
+        totalTimeProgressBar.stopped = true;
+        
         var coffeeWidth = coffeeBitmap.width;
         var coffeeHeight = coffeeBitmap.height;
         
@@ -124,9 +130,12 @@ class Game1 extends Sprite{
           
           vp.stop();
           
-          var drinkPl = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 3*1000, 7, 7, 47, drinkData);
+          var drinkPl = new VideoPlayer(this, 0, 0, stage.stageWidth, stage.stageHeight, 4*1000, 7, 7, 47, drinkData);
           drinkPl.onEnd = function(){
             vp.start();
+            coffeeLock = false;
+            totalTimeProgressBar.stopped = false;
+            totalTimeProgressBar.reset();
           };
           
           drinkPl.start();
@@ -178,14 +187,12 @@ class Game1 extends Sprite{
       trace(codeTxtPos);
       codeTextField.text = codeTxt.substring(codeTxtPos, codeTxt.length);
       //codeTextField.setTextFormat(patternTxtFormat);
-      //codeTextField.setTextFormat(enteredTxtFormat, 0, codeTxtPos);
-      
+      //codeTextField.setTextFormat(enteredTxtFormat, 0, codeTxtPos);      
     } 
     
     if(codeTxtPos >= codeTxt.length){
       // win!
-      winGame();
-      
+      winGame();      
       totalTimeProgressBar.destroy();
     }
   }

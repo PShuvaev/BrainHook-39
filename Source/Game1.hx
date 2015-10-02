@@ -83,6 +83,11 @@ class Game1 extends Sprite{
       totalTimeProgressBar.start();
       
       
+      var coffeeLevelFont = Assets.getFont ("assets/FreebooterUpdated.ttf");
+      
+      patternTxtFormat = new TextFormat(coffeeLevelFont.fontName, 56, 0xff0000, true);
+      enteredTxtFormat = new TextFormat(coffeeLevelFont.fontName, 56, 0xff0000, true);
+      
       addChild(codeTextField);
       codeTextField.width = stage.stageWidth;
       codeTextField.height = 100;

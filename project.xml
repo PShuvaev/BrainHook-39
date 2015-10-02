@@ -8,7 +8,6 @@
   
   <haxelib name="openfl" />
   <haxelib name="actuate" />
-  <haxelib name="haxe-gif" />
   
   <assets path="Assets" rename="assets" />
   

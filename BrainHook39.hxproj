@@ -32,7 +32,6 @@
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="haxe-gif" />
     <library name="actuate" />
     <!-- example: <library name="..." /> -->
   </haxelib>
